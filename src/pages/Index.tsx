@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Plus, Search, Filter, Star, Users, Calendar, BarChart3, Database, Brain, FileText, Settings2, Bell } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EnhancedDataGrid from "@/components/EnhancedDataGrid";
+import EnhancedAnalysisBuilder from "@/components/AnalysisBuilder";
 
 const Index = () => {
   const [activeView, setActiveView] = useState("dashboard");
@@ -220,7 +221,7 @@ const WorkspaceView = ({ onBack }: { onBack: () => void }) => {
         {/* Main Content */}
         <main className="flex-1 overflow-auto">
           {activeTab === "data" && <DataView />}
-          {activeTab === "analyses" && <AnalysisBuilder />}
+          {activeTab === "analyses" && <EnhancedAnalysisBuilder />}
           {activeTab === "insights" && <AIInsights />}
           {activeTab === "reports" && <ReportBuilder />}
           {activeTab === "variables" && <VariableManager />}
@@ -309,91 +310,6 @@ const DataView = () => {
     </div>
   );
 };
-
-const AnalysisBuilder = () => (
-  <div className="p-6">
-    <div className="grid grid-cols-12 gap-6 h-full">
-      {/* Variables Panel */}
-      <div className="col-span-3 bg-white rounded-lg border border-gray-200 p-4">
-        <h3 className="font-semibold mb-4">Variables</h3>
-        <Input placeholder="Search variables..." className="mb-4" />
-        <div className="space-y-2">
-          <div className="p-3 border border-gray-200 rounded-lg cursor-grab hover:bg-gray-50">
-            <div className="font-medium text-sm">Age</div>
-            <div className="text-xs text-gray-500">Scale • 2,450 valid</div>
-          </div>
-          <div className="p-3 border border-gray-200 rounded-lg cursor-grab hover:bg-gray-50">
-            <div className="font-medium text-sm">Gender</div>
-            <div className="text-xs text-gray-500">Nominal • 2,450 valid</div>
-          </div>
-          <div className="p-3 border border-gray-200 rounded-lg cursor-grab hover:bg-gray-50">
-            <div className="font-medium text-sm">Satisfaction</div>
-            <div className="text-xs text-gray-500">Ordinal • 2,430 valid</div>
-          </div>
-          <div className="p-3 border border-gray-200 rounded-lg cursor-grab hover:bg-gray-50">
-            <div className="font-medium text-sm">Likelihood_Recommend</div>
-            <div className="text-xs text-gray-500">Scale • 2,445 valid</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Canvas */}
-      <div className="col-span-6 bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="font-semibold mb-6">Analysis Canvas</h3>
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-            <div className="text-gray-500 mb-2">Drop variables for Rows</div>
-            <div className="text-sm text-gray-400">Drag categorical variables here</div>
-          </div>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-            <div className="text-gray-500 mb-2">Drop variables for Columns</div>
-            <div className="text-sm text-gray-400">Drag categorical variables here</div>
-          </div>
-        </div>
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-6">
-          <div className="text-gray-500 mb-2">Dependent Variable</div>
-          <div className="text-sm text-gray-400">Drag your outcome variable here</div>
-        </div>
-        <Button className="w-full" size="lg">Run Analysis</Button>
-      </div>
-
-      {/* Options Panel */}
-      <div className="col-span-3 bg-white rounded-lg border border-gray-200 p-4">
-        <h3 className="font-semibold mb-4">Analysis Options</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">Test Type</label>
-            <select className="w-full p-2 border border-gray-300 rounded">
-              <option>Auto-detect</option>
-              <option>Chi-square</option>
-              <option>T-test</option>
-              <option>ANOVA</option>
-              <option>Regression</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">Confidence Level</label>
-            <select className="w-full p-2 border border-gray-300 rounded">
-              <option>95%</option>
-              <option>90%</option>
-              <option>99%</option>
-            </select>
-          </div>
-          <div className="space-y-2">
-            <label className="flex items-center">
-              <input type="checkbox" className="mr-2" />
-              <span className="text-sm">Add to Report</span>
-            </label>
-            <label className="flex items-center">
-              <input type="checkbox" className="mr-2" defaultChecked />
-              <span className="text-sm">Show AI Interpretation</span>
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
 
 const AIInsights = () => (
   <div className="p-6">
