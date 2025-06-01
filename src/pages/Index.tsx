@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Plus, Search, Filter, Star, Users, Calendar, BarChart3, Database, Brain, FileText, Settings2, Bell } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import EnhancedDataGrid from "@/components/EnhancedDataGrid";
 
 const Index = () => {
   const [activeView, setActiveView] = useState("dashboard");
@@ -242,57 +242,73 @@ const SidebarItem = ({ icon: Icon, label, active, onClick }: any) => (
   </button>
 );
 
-const DataView = () => (
-  <div className="p-6">
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-      <div className="border-b border-gray-200 p-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Data Grid</h2>
-          <div className="flex items-center space-x-3">
-            <Input placeholder="Search variables..." className="w-64" />
-            <Button variant="outline" size="sm">Add Variable</Button>
-            <Button variant="outline" size="sm">Import Data</Button>
-          </div>
-        </div>
-      </div>
-      
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gray-50 sticky top-0">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">#</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Satisfaction</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Likelihood_Recommend</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Region</th>
-            </tr>
-            <tr className="border-b border-gray-200 bg-gray-25">
-              <td className="px-4 py-2 text-xs text-gray-500">Type</td>
-              <td className="px-4 py-2 text-xs text-gray-500">Scale</td>
-              <td className="px-4 py-2 text-xs text-gray-500">Nominal</td>
-              <td className="px-4 py-2 text-xs text-gray-500">Ordinal</td>
-              <td className="px-4 py-2 text-xs text-gray-500">Scale</td>
-              <td className="px-4 py-2 text-xs text-gray-500">Nominal</td>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {Array.from({ length: 20 }, (_, i) => (
-              <tr key={i} className="hover:bg-gray-50">
-                <td className="px-4 py-3 text-sm text-gray-500">{i + 1}</td>
-                <td className="px-4 py-3 text-sm">{25 + Math.floor(Math.random() * 40)}</td>
-                <td className="px-4 py-3 text-sm">{Math.random() > 0.5 ? "Male" : "Female"}</td>
-                <td className="px-4 py-3 text-sm">{Math.floor(Math.random() * 5) + 1}</td>
-                <td className="px-4 py-3 text-sm">{(Math.random() * 10).toFixed(1)}</td>
-                <td className="px-4 py-3 text-sm">{["North", "South", "East", "West"][Math.floor(Math.random() * 4)]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+const DataView = () => {
+  // Sample data structure matching your requirements
+  const [variables, setVariables] = useState([
+    {
+      name: "Age",
+      label: "Respondent Age",
+      type: "scale" as const,
+      valueLabels: {},
+      missingValues: []
+    },
+    {
+      name: "Gender",
+      label: "Gender Identity",
+      type: "nominal" as const,
+      valueLabels: { "1": "Male", "2": "Female", "3": "Other" },
+      missingValues: []
+    },
+    {
+      name: "Satisfaction",
+      label: "Overall Satisfaction Rating",
+      type: "ordinal" as const,
+      valueLabels: { "1": "Very Dissatisfied", "2": "Dissatisfied", "3": "Neutral", "4": "Satisfied", "5": "Very Satisfied" },
+      missingValues: []
+    },
+    {
+      name: "Likelihood_Recommend",
+      label: "Likelihood to Recommend (0-10)",
+      type: "scale" as const,
+      valueLabels: {},
+      missingValues: []
+    },
+    {
+      name: "Region",
+      label: "Geographic Region",
+      type: "nominal" as const,
+      valueLabels: { "1": "North", "2": "South", "3": "East", "4": "West" },
+      missingValues: []
+    }
+  ]);
+
+  // Sample data rows
+  const [data] = useState(() => {
+    return Array.from({ length: 20 }, (_, i) => [
+      25 + Math.floor(Math.random() * 40), // Age
+      Math.floor(Math.random() * 3) + 1, // Gender (1-3)
+      Math.floor(Math.random() * 5) + 1, // Satisfaction (1-5)
+      (Math.random() * 10).toFixed(1), // Likelihood_Recommend (0-10)
+      Math.floor(Math.random() * 4) + 1 // Region (1-4)
+    ]);
+  });
+
+  const handleVariableUpdate = (index: number, updatedVariable: any) => {
+    const newVariables = [...variables];
+    newVariables[index] = updatedVariable;
+    setVariables(newVariables);
+  };
+
+  return (
+    <div className="h-full">
+      <EnhancedDataGrid 
+        variables={variables} 
+        data={data} 
+        onVariableUpdate={handleVariableUpdate}
+      />
     </div>
-  </div>
-);
+  );
+};
 
 const AnalysisBuilder = () => (
   <div className="p-6">
